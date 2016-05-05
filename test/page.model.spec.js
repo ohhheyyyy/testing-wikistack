@@ -142,7 +142,7 @@ describe('Page model', function() {
     describe('Validations', function() {
         var page;
         beforeEach(function() {
-            page = new Page();
+            page = Page.build();
         });
         it('errors without title', function(done) {
             page.validate()
@@ -153,15 +153,30 @@ describe('Page model', function() {
                     done();
                 });
         });
-        it('errors without content');
-        it('errors given an invalid status');
+        it('errors without content', function(done) {
+            page.validate()
+                .then(function(err) {
+                    expect(err).to.exist;
+                    expect(err.errors).to.exist;
+                    expect(err.errors[1].path).to.equal('content');
+                    done();
+                });
+        });
+
+        it('errors given an invalid status', function(done) {
+            page.validate()
+                .then(function(err) {
+                  //console.log("err looks like: ", err);
+                    expect(err).to.exist;
+                    expect(err.errors).to.exist;
+                    expect(err.errors[1].path).to.equal('content');
+                    done();
+                });
+        });
     });
 
     describe('Hooks', function() {
         it('it sets urlTitle based on title before validating');
+
     });
-
-
-
 });
-
