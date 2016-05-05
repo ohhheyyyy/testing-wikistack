@@ -5,14 +5,14 @@ chai.use(spies);
 
 // Simple Test
 describe("calculation", function() {
-    xit("confirms basic arithmetic", function() {
+    it("confirms basic arithmetic", function() {
         expect(2 + 2).to.be.equal(4);
     });
 });
 
 // Asynchronous
 describe("asynchronous function", function() {
-    xit("confirms setTimeout\'s timer accuracy", function(done) {
+    it("confirms setTimeout\'s timer accuracy", function(done) {
         var start = new Date();
         setTimeout(function() {
             var duration = new Date() - start;
@@ -28,7 +28,7 @@ describe("asynchronous function", function() {
 // function once for every element.
 
 describe("Spy", function() {
-    xit("will invoke a function once per element", function() {
+    it("will invoke a function once per element", function() {
         var arr = ['x', 'y', 'z'];
 
         function logNth(value, index) {
@@ -42,7 +42,7 @@ describe("Spy", function() {
 
 // Confirmation Bias
 describe("Confirmation Bias", function() {
-    xit ("actually asserts the result we're looking for", function() {
+    it ("actually asserts the result we're looking for", function() {
             function largerNum(a, b) {
                 if (a < b) {
                     return b;

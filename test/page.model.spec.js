@@ -19,6 +19,13 @@ describe('Page model', function() {
             })
             .catch(done);
     });
+    beforeEach(function(done) {
+        Page.truncate()
+            .then(function() {
+                done();
+            })
+            .catch(done);
+    });
 
     describe('Virtuals', function() {
         var page;
@@ -140,43 +147,62 @@ describe('Page model', function() {
     });
 
     describe('Validations', function() {
-        var page;
-        beforeEach(function() {
-            page = Page.build();
-        });
-        it('errors without title', function(done) {
-            page.validate()
+        it('errors without title', function() {
+            var page = Page.build({});
+            return page
+                .validate()
                 .then(function(err) {
                     expect(err).to.exist;
-                    expect(err.errors).to.exist;
-                    expect(err.errors[0].path).to.equal('title');
-                    done();
-                });
-        });
-        it('errors without content', function(done) {
-            page.validate()
-                .then(function(err) {
-                    expect(err).to.exist;
-                    expect(err.errors).to.exist;
-                    expect(err.errors[1].path).to.equal('content');
-                    done();
+                    expect(err.errors).to.contain.a.thing.with.property('path', 'title');
                 });
         });
 
-        it('errors given an invalid status', function(done) {
-            page.validate()
+        it('errors without content', function() {
+            var page = Page.build({});
+            return page
+                .validate()
                 .then(function(err) {
-                  //console.log("err looks like: ", err);
                     expect(err).to.exist;
-                    expect(err.errors).to.exist;
-                    expect(err.errors[1].path).to.equal('content');
-                    done();
+                    expect(err.errors).to.contain.a.thing.with.property('path', 'content');
                 });
         });
+
+        it('errors given an invalid status', function() {
+            var page = Page.build({
+                title: 'kjkja',
+                content: 'asdjka',
+                status: 'evil'
+            });
+            return page
+                .save()
+                .then(function() {
+                    throw Error('Promise should have rejected');
+                }, function(err) {
+                    expect(err).to.exist;
+                    expect(err.message).to.contain('status');
+                });
+        });
+
+        it('will be valid with the above stuff', function() {
+            var page = Page.build({
+                title: 'Foobar',
+                content: 'Foos and bars but together'
+            });
+            return page.save();
+        });
+
     });
 
     describe('Hooks', function() {
-        it('it sets urlTitle based on title before validating');
-
+        it('it sets urlTitle based on title before validating', function() {
+            var page = Page.build({
+                title: 'The Who',
+                content: 'A band on first base'
+            });
+            return page.save()
+                .then(function() {
+                    expect(page.urlTitle).to.equal('The_Who');
+                });
+        });
     });
 });
