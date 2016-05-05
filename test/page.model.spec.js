@@ -50,12 +50,12 @@ describe('Page model', function() {
                 })
                 .catch(done);
         });
-        afterEach(function(done){
-           Page.sync({ force: true })
-            .then(function() {
-                done();
-            })
-            .catch(done);
+        afterEach(function(done) {
+            Page.sync({ force: true })
+                .then(function() {
+                    done();
+                })
+                .catch(done);
         });
         describe('findByTag', function() {
             it('gets pages with the search tag', function(done) {
@@ -67,30 +67,34 @@ describe('Page model', function() {
                     .catch(done);
             });
             it('does not get pages without the search tag', function(done) {
-
-                done();
-
+                Page.findByTag('falafel')
+                    .then(function(pages) {
+                        expect(pages).to.have.lengthOf(0);
+                        done();
+                    })
+                    .catch(done);
             });
         });
     });
 
-    describe('Instance methods', function() {
-        describe('findSimilar', function() {
-            it('never gets itself');
-            it('gets other pages with any common tags');
-            it('does not get other pages without any common tags');
-        });
-    });
 
-    describe('Validations', function() {
-        it('errors without title');
-        it('errors without content');
-        it('errors given an invalid status');
+describe('Instance methods', function() {
+    describe('findSimilar', function() {
+        it('never gets itself');
+        it('gets other pages with any common tags');
+        it('does not get other pages without any common tags');
     });
+});
 
-    describe('Hooks', function() {
-        it('it sets urlTitle based on title before validating');
-    });
+describe('Validations', function() {
+    it('errors without title');
+    it('errors without content');
+    it('errors given an invalid status');
+});
+
+describe('Hooks', function() {
+it('it sets urlTitle based on title before validating');
+});
 
 });
 
